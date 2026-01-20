@@ -12,6 +12,7 @@ import './Poker.css';
 import Spinner from './Spinner';
 import WinScreen from './WinScreen'
 import SocialSection from './components/social/SocialSection';
+import EmoticonModal from './components/emoticons/EmoticonModal';
 
 import Player from "./components/players/Player";
 import ShowdownPlayer from "./components/players/ShowdownPlayer";
@@ -79,7 +80,10 @@ class App extends Component {
       3: {isAnimating: false, content: null},
       4: {isAnimating: false, content: null},
       5: {isAnimating: false, content: null}
-    }
+    },
+    displayedPlayerName: null,
+    currentUserEmoticon: null,
+    isEmoticonModalOpen: false
   }
 
   cardAnimationDelay = 0;
@@ -233,6 +237,37 @@ imageLoaderRequest.send();
       })
   }
 
+  handleAvatarClick = (playerIndex) => {
+    const player = this.state.players[playerIndex];
+    // Check if it's the current user (robot: false)
+    if (!player.robot) {
+      // Open emoticon modal for current user
+      this.setState({ isEmoticonModalOpen: true });
+    } else {
+      // Display name for other players
+      this.setState({ displayedPlayerName: playerIndex });
+      // Hide after 3 seconds
+      setTimeout(() => {
+        this.setState({ displayedPlayerName: null });
+      }, 3000);
+    }
+  }
+
+  handleEmoticonSelect = (emoticon) => {
+    this.setState({ 
+      currentUserEmoticon: emoticon,
+      isEmoticonModalOpen: false 
+    });
+    // Hide emoticon after 5 seconds
+    setTimeout(() => {
+      this.setState({ currentUserEmoticon: null });
+    }, 5000);
+  }
+
+  handleCloseEmoticonModal = () => {
+    this.setState({ isEmoticonModalOpen: false });
+  }
+
   renderBoard = () => {
     const { 
       players,
@@ -260,6 +295,9 @@ imageLoaderRequest.send();
             phase={phase}
             playerAnimationSwitchboard={playerAnimationSwitchboard}      
             endTransition={this.popAnimationState}
+            onAvatarClick={this.handleAvatarClick}
+            displayedPlayerName={this.state.displayedPlayerName === index ? player.name : null}
+            currentUserEmoticon={!player.robot ? this.state.currentUserEmoticon : null}
           />
       )
       return result
@@ -422,6 +460,11 @@ imageLoaderRequest.send();
     return (
       <div className="App">
         <SocialSection />
+        <EmoticonModal
+          isOpen={this.state.isEmoticonModalOpen}
+          onClose={this.handleCloseEmoticonModal}
+          onSelectEmoticon={this.handleEmoticonSelect}
+        />
         <div className='poker-table--wrapper'> 
           { 
             (this.state.loading) ? <Spinner/> : 

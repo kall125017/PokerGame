@@ -18,6 +18,9 @@ const Player = (props) => {
     isActive,
     phase,
     clearCards,
+    onAvatarClick,
+    displayedPlayerName,
+    currentUserEmoticon,
     player: {
       robot,
       folded,
@@ -91,10 +94,21 @@ const Player = (props) => {
       </div>
       <div className="player-entity--container">
         <div className="player-avatar--container">
+          {(displayedPlayerName || currentUserEmoticon) && (
+            <div className={`player-avatar--overlay ${currentUserEmoticon ? 'emoticon-overlay' : 'name-overlay'}`}>
+              {currentUserEmoticon ? (
+                <span className="player-avatar--emoticon">{currentUserEmoticon}</span>
+              ) : (
+                <span className="player-avatar--display-name">{displayedPlayerName}</span>
+              )}
+            </div>
+          )}
           <img 
-            className={`player-avatar--image${(isActive ? ' activePlayer' : '')}`} 
+            className={`player-avatar--image${(isActive ? ' activePlayer' : '')} clickable-avatar`} 
             src={avatarURL} 
-            alt="Player Avatar" 
+            alt="Player Avatar"
+            onClick={() => onAvatarClick && onAvatarClick(arrayIndex)}
+            style={{ cursor: 'pointer' }}
           />
           <h5 className="player-info--name" style={{'fontSize': (name.length < 14) ? 12 : 10}}>
             {`${name}`}
