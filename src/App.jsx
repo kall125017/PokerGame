@@ -13,6 +13,7 @@ import Spinner from './Spinner';
 import WinScreen from './WinScreen'
 import SocialSection from './components/social/SocialSection';
 import EmoticonModal from './components/emoticons/EmoticonModal';
+import Chat from './components/chat/Chat';
 
 import Player from "./components/players/Player";
 import ShowdownPlayer from "./components/players/ShowdownPlayer";
@@ -456,7 +457,15 @@ imageLoaderRequest.send();
       </div>
     )
   }
+  getCurrentPlayerName = () => {
+    if (!this.state.players) return null;
+    const currentPlayer = this.state.players.find(player => !player.robot);
+    return currentPlayer ? currentPlayer.name : null;
+  }
+
   render() {
+    const currentPlayerName = this.getCurrentPlayerName();
+    
     return (
       <div className="App">
         <SocialSection />
@@ -465,12 +474,17 @@ imageLoaderRequest.send();
           onClose={this.handleCloseEmoticonModal}
           onSelectEmoticon={this.handleEmoticonSelect}
         />
-        <div className='poker-table--wrapper'> 
-          { 
-            (this.state.loading) ? <Spinner/> : 
-            (this.state.winnerFound) ? <WinScreen /> : 
-            this.renderGame()
-          }
+        <div className='poker-game--layout'>
+          <div className='poker-table--wrapper'> 
+            { 
+              (this.state.loading) ? <Spinner/> : 
+              (this.state.winnerFound) ? <WinScreen /> : 
+              this.renderGame()
+            }
+          </div>
+          {!this.state.loading && !this.state.winnerFound && (
+            <Chat currentPlayerName={currentPlayerName} />
+          )}
         </div>
       </div>
     );
