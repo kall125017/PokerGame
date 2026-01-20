@@ -11,6 +11,7 @@ import './Poker.css';
 
 import Spinner from './Spinner';
 import WinScreen from './WinScreen'
+import SocialSection from './components/social/SocialSection';
 
 import Player from "./components/players/Player";
 import ShowdownPlayer from "./components/players/ShowdownPlayer";
@@ -420,6 +421,7 @@ imageLoaderRequest.send();
   render() {
     return (
       <div className="App">
+        <SocialSection />
         <div className='poker-table--wrapper'> 
           { 
             (this.state.loading) ? <Spinner/> : 
