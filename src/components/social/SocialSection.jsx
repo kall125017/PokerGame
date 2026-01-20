@@ -6,7 +6,7 @@ const SocialSection = () => {
     <div className="social-section">
       <div className="social-section--content">
         <div className="social-section--left">
-          <h3 className="social-section--title">Poker Room</h3>
+          <h3 className="social-section--title">BetfuzPokerDemo</h3>
         </div>
         <div className="social-section--center">
           <div className="social-section--online">
